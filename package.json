@@ -1,0 +1,23 @@
+{
+  "name": "ddk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "it": "ts-node src/mairiswedding.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trautw/ddk.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/trautw/ddk/issues"
+  },
+  "homepage": "https://github.com/trautw/ddk#readme",
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  }
+}
