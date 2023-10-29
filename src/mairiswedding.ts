@@ -14,9 +14,7 @@ export class Formation {
   constructor(_scope: Construct, _id: string, props: FormationProps) {
     this.props = props;
   }
-  showCribs() {
-    return "From Formation " + this.props.strathspeyUrl + " " + this.props.showCribs();
-  }
+  showCribs = () => this.props.showCribs();
 }
 
 export interface HandsRoundProps extends FormationProps {
@@ -30,7 +28,18 @@ export const HandsRoundPropsDefault : HandsRoundProps = {
   persons: '6P',
   duration: 'FULL',
   showCribs: function (): string {
-    return 'six hands round and back';
+    let hands = "unknown";
+    switch(this.persons) {
+      case "6P": {
+        hands = 'six';
+        break;
+      }
+      case "4P": {
+        hands = 'four';
+        break;
+      }
+    }
+    return hands + ' hands round and back';
   }
 }
 
@@ -71,7 +80,12 @@ export const TurnPropsDefault : TurnProps = {
   orientation: 'RIGHT',
   duration: 360,
   showCribs: function (): string {
-    return 'Turn right';
+    let orient = 'right';
+    if (this.orientation == "LEFT") { orient = 'left'};
+    let rounds = '';
+    if (this.duration != 360) { rounds = ' '+this.duration/360; };
+    if (this.duration == 180) { rounds = ' half'; };
+    return 'Turn '+orient + rounds;
   }
 }
 
@@ -96,7 +110,18 @@ export const ReelPropsDefault : ReelProps = {
   duration: 'FULL',
   reelType: 'R3',
   showCribs: function (): string {
-    return 'Reel of 3';
+    let durationString = '';
+    if (this.duration == 'HALF') { durationString = 'half '; };
+    let reelTypeString = 'three';
+    if (this.reelType == 'R4') { reelTypeString = 'four'; };
+    let orientationString = 'parallel';
+    if (this.orientation == 'ACROSS') { orientationString = 'across the set'; };
+    if (this.orientation == 'DIAG1') { orientationString = 'diagonal one'; };
+    if (this.orientation == 'DIAG2') { orientationString = 'diagonal two'; };
+    if (this.orientation == 'DIAG3') { orientationString = 'diagonal one'; };
+    if (this.orientation == 'DIAG4') { orientationString = 'diagonal two'; };
+
+    return durationString + orientationString + ' reel of ' + reelTypeString;
   }
 }
 
@@ -185,11 +210,11 @@ export class MairisWedding extends Scd {
         formations: [
           new Turn(scope, 'TurnRight', { ...TurnPropsDefault }),
           new Cast(scope, 'Cast', { ...CastPropsDefault }),
-          new Turn(scope, 'TurnLeft', { ...TurnPropsDefault, orientation: "LEFT", duration: 420 }),
+          new Turn(scope, 'TurnLeft', { ...TurnPropsDefault, orientation: "LEFT", duration: 360+90+45 }),
           new Reel(scope, 'Reel1', { ...ReelPropsDefault, orientation: "DIAG1", duration: "HALF", reelType: "R4" }),
-          new Reel(scope, 'Reel1', { ...ReelPropsDefault, orientation: "DIAG2", duration: "HALF", reelType: "R4" }),
-          new Reel(scope, 'Reel2', { ...ReelPropsDefault, orientation: "DIAG3", duration: "HALF", reelType: "R4" }),
-          new Reel(scope, 'Reel3', { ...ReelPropsDefault, orientation: "DIAG4", duration: "HALF", reelType: "R4" }),
+          new Reel(scope, 'Reel2', { ...ReelPropsDefault, orientation: "DIAG2", duration: "HALF", reelType: "R4" }),
+          new Reel(scope, 'Reel3', { ...ReelPropsDefault, orientation: "DIAG3", duration: "HALF", reelType: "R4" }),
+          new Reel(scope, 'Reel4', { ...ReelPropsDefault, orientation: "DIAG4", duration: "HALF", reelType: "R4" }),
           new Reel(scope, 'ReelAcross', { ...ReelPropsDefault, orientation: "ACROSS",duration: "FULL", reelType: "R3" }),
           new HandsRound(scope, 'SixHandsRB', { ...HandsRoundPropsDefault, }),
         ]
