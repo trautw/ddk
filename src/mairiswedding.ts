@@ -225,9 +225,31 @@ export class MairisWedding extends Scd {
   }
 }
 
-const mairisWedding = new MairisWedding(this,"MairisWeddingSCD",{});
+export class AMorningInMarch extends Scd {   
+  constructor(scope: Construct, id: string, props: MarisWeddingProps) {
+    super(scope, id, {
+      ...props,
+      name: "A Morning in March",
+      strathspeyUrl: 'https://my.strathspey.org/dd/dance/unknown/',
+      danceCharacter: 'Reel · 32 bars · 3 couples · Longwise - 4   (Progression: 213)',
+      danceType: "Reel",
+      couples: "3 couples",
+      shape: "Longwise 4",
+      danceProgression: new ThreeInAFourDance(scope,"ThreeInFour", {
+        formations: [
+          new Reel(scope, 'Reel2', { ...ReelPropsDefault, orientation: "DIAG2", duration: "HALF", reelType: "R4" }),
+        ]
+      }
+      )
+    });
 
-mairisWedding.showCribs();
+  }
+}
+
+// const dance = new MairisWedding(this,"MairisWeddingSCD",{});
+const dance = new AMorningInMarch(this,"AMorningInMarchSCD",{});
+
+dance.showCribs();
 /*
 app.showDiagrams();
 app.showDifficultParts();
