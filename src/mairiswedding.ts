@@ -2,20 +2,8 @@
 // import { ExampleOpts } from './types'
 // import { ExampleOptsDefault } from './config'
 // import merge from 'merge'
-
-export interface FormationProps {
-  showCribs(): string;
-  strathspeyUrl: string,
-}
-
-type Construct = any;
-export class Formation {
-  props: FormationProps;
-  constructor(_scope: Construct, _id: string, props: FormationProps) {
-    this.props = props;
-  }
-  showCribs = () => this.props.showCribs();
-}
+import { Construct, Formation, FormationProps } from './scdbase'
+import { Poussette, PoussettePropsDefault } from './poussette'
 
 export interface HandsRoundProps extends FormationProps {
   persons: string,
@@ -135,6 +123,87 @@ export class Reel extends Formation {
   }
 }
 
+
+export interface SetProps extends FormationProps {
+  orientation: string, // DIAG, ..
+}
+
+
+// Defaults
+export const SetPropsDefault : SetProps = {
+  strathspeyUrl: 'unknownUrl',
+  orientation: "PARALLEL",
+  showCribs: function (): string {
+    return 'Set';
+  }
+}
+
+export class Set extends Formation {
+  constructor(scope: Construct, id: string, props: SetProps) {
+    super(scope, id, props);
+  }
+}
+
+export interface LoopProps extends FormationProps {
+  orientation: string, // DIAG, ..
+}
+
+
+// Defaults
+export const LoopPropsDefault : LoopProps = {
+  strathspeyUrl: 'unknownUrl',
+  orientation: "around partner",
+  showCribs: function (): string {
+    return 'Loop';
+  }
+}
+
+export class Loop extends Formation {
+  constructor(scope: Construct, id: string, props: LoopProps) {
+    super(scope, id, props);
+  }
+}
+
+export interface PetronellaProps extends FormationProps {
+  orientation: string, // DIAG, ..
+}
+
+// Defaults
+export const PetronellaPropsDefault : PetronellaProps = {
+  strathspeyUrl: 'unknownUrl',
+  orientation: "around partner",
+  showCribs: function (): string {
+    return 'Petronella';
+  }
+}
+
+export class Petronella extends Formation {
+  constructor(scope: Construct, id: string, props: LoopProps) {
+    super(scope, id, props);
+  }
+}
+
+export interface TwirlProps extends FormationProps {
+  orientation: string, // DIAG, ..
+}
+
+// Defaults
+export const TwirlPropsDefault : TwirlProps = {
+  strathspeyUrl: 'unknownUrl',
+  orientation: "to place",
+  showCribs: function (): string {
+    return 'Twirl';
+  }
+}
+
+export class Twirl extends Formation {
+  constructor(scope: Construct, id: string, props: LoopProps) {
+    super(scope, id, props);
+  }
+}
+
+
+
 export interface DanceProgressionProps {
 }
 
@@ -237,7 +306,16 @@ export class AMorningInMarch extends Scd {
       shape: "Longwise 4",
       danceProgression: new ThreeInAFourDance(scope,"ThreeInFour", {
         formations: [
-          new Reel(scope, 'Reel2', { ...ReelPropsDefault, orientation: "DIAG2", duration: "HALF", reelType: "R4" }),
+          new Set(scope, 'Set1', { ...SetPropsDefault}),
+          new Set(scope, 'Set2', { ...SetPropsDefault}),
+          new Loop(scope, 'Loop', { ...LoopPropsDefault}),
+          new Poussette(scope, 'Poussette', { ...PoussettePropsDefault}),
+          new Reel(scope, 'Reel1', { ...ReelPropsDefault, orientation: "DIAG2", duration: "HALF", reelType: "R4" }),
+          new Set(scope, 'Set2', { ...SetPropsDefault}),
+          new Petronella(scope, 'Set2', { ...PetronellaPropsDefault}),
+          new Turn(scope, 'Set2', { ...TurnPropsDefault, duration: 180}),
+          new Twirl(scope, 'Twirl', { ...TwirlPropsDefault}),
+          new Reel(scope, 'Reel2', { ...ReelPropsDefault, reelType: "R3" }),
         ]
       }
       )
@@ -250,6 +328,8 @@ export class AMorningInMarch extends Scd {
 const dance = new AMorningInMarch(this,"AMorningInMarchSCD",{});
 
 dance.showCribs();
+
+export { Formation, FormationProps };
 /*
 app.showDiagrams();
 app.showDifficultParts();
