@@ -1,22 +1,24 @@
-import { Formation, FormationProps, LoopProps } from "./mairiswedding";
+import { Formation, FormationProps } from "../base/scd";
 type Construct = any;
 
 export interface PoussetteProps extends FormationProps {
     orientation: string, // DIAG, ..
+    duration: string, // half, 
+    modifier: string, // Hello-goodbye
 }
   
-// Defaults
 export const PoussettePropsDefault : PoussetteProps = {
     strathspeyUrl: 'unknownUrl',
     orientation: "to place",
-    showCribs: function (): string {
-      return 'Poussette';
+    duration: "",
+    modifier: "",
+    showCribs: function (): string[] {
+      return [ this.duration, this.modifier, 'poussette'];
     }
 }
   
 export class Poussette extends Formation {
-    constructor(scope: Construct, id: string, props: LoopProps) {
+    constructor(scope: Construct, id: string, props: PoussetteProps) {
       super(scope, id, props);
     }
 }
-  

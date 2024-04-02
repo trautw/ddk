@@ -1,0 +1,2 @@
+it:
+	npm run it
